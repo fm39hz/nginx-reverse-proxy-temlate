@@ -9,7 +9,7 @@ Small docker script to create nginx reverse proxy
 - Create .env file
 
   ```bash
-  mv .env.example .env
+  cp .env.example .env
   ```
 
 ## Start proxy

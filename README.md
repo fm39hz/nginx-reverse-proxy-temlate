@@ -19,3 +19,9 @@ Small docker script to create nginx reverse proxy
   ```bash
   docker-compose up --build
   ```
+
+- Generate certificate for the first time
+
+  ```bash
+  docker exec -it certbot certonly --standalone -d ${DOMAIN_1}
+  ```

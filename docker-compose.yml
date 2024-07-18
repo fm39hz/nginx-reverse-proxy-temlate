@@ -1,0 +1,30 @@
+services:
+  nginx-proxy:
+    image: nginx:alpine
+    restart: always
+    container_name: nginx-server
+    networks:
+      - proxy-net
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    env_file:
+      - .env
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 1w & wait $${!}; done;'"
+    env_file:
+      - .env
+
+networks:
+  proxy-net:
+    external: true
